@@ -1,5 +1,7 @@
 package com.example.di
 
+import com.example.data.repository.UserDataSourceImpl
+import com.example.domain.repository.UserDataSource
 import com.example.utils.Constants.DATABASE_NAME
 import com.example.utils.TokenManager
 import com.typesafe.config.ConfigFactory
@@ -15,11 +17,13 @@ val koinModule = module {
     }
 
     single {
-        KMongo.createClient(connectionString = System.getenv("MONGODB_CONNECTION")
+        KMongo.createClient(connectionString = System.getenv("MONGO_CONNECTION")
         )
             .coroutine
             .getDatabase(DATABASE_NAME)
     }
+
+    single <UserDataSource>{ UserDataSourceImpl(get()) }
 }
 
 

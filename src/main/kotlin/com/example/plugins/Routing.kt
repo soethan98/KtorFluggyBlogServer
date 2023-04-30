@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.domain.repository.UserDataSource
 import com.example.routes.authorizedRoute
 import com.example.routes.loginRoute
 import com.example.routes.unAuthorizedRoute
@@ -12,12 +13,13 @@ import org.koin.ktor.ext.inject
 import rootRoute
 
 fun Application.configureRouting() {
+    val userDataSource by inject<UserDataSource>()
+    val tokenManager by inject<TokenManager>()
     routing {
-        val tokenManager: TokenManager by
-        KoinJavaComponent.inject(TokenManager::class.java)
+
 
         rootRoute()
-        loginRoute(application,tokenManager)
+        loginRoute(application,tokenManager, userDataSource = userDataSource)
         unAuthorizedRoute()
         authorizedRoute()
     }
