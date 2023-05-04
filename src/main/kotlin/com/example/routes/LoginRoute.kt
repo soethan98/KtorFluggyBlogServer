@@ -25,10 +25,11 @@ fun Route.loginRoute(app:Application,tokenManager: TokenManager,
         val request = call.receive<ApiRequest>()
         if (request.tokenId.isNotEmpty()){
 
-            val result = verifyGoogleTokenId(tokenId = request.tokenId, app =  app)
+            val result = verifyGoogleTokenId(tokenId = request.tokenId)
 
             if (result!=null){
-                tokenManager.generateJwtToken(result.payload.subject, userEmail = result.payload.email)
+                val token = tokenManager.generateJwtToken(result.payload.subject, userEmail = result.payload.email)
+                call.respond(token)
                 saveUserToDatabase(
                     app = app,
                     result = result,
@@ -58,7 +59,6 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(ap
     val response = userDataSource.saveUserInfo(user)
     if (response) {
         app.log.info("USER SUCCESSFULLY SAVED/RETRIEVED")
-        call.respond("Success Saved")
     } else {
         app.log.info("ERROR SAVING THE USER")
         call.respond("Failed Saved")
@@ -68,7 +68,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.saveUserToDatabase(ap
 }
 
 
-fun verifyGoogleTokenId(tokenId:String,app: Application):GoogleIdToken?{
+fun verifyGoogleTokenId(tokenId:String):GoogleIdToken?{
     return try {
         val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
             .setAudience(listOf(System.getenv("google_web_client")))

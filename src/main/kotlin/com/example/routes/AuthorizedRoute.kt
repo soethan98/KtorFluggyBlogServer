@@ -10,19 +10,21 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 
-fun Route.authorizedRoute(){
+fun Route.authorizedRoute() {
     authenticate {
-        get(Endpoint.Authorized.path){
+        get(Endpoint.Authorized.path) {
             val principal = call.principal<JWTPrincipal>()
             val userId = principal?.payload?.getClaim("email")?.asString()
             call.respond(HttpStatusCode.OK, "Your userId is $userId")
-            call.respond(message = ApiResponse(
-                success = true,
-            ),
-                status = HttpStatusCode.OK)
+            call.respond(
+                message = ApiResponse(
+                    success = true,
+                    data = "Authenticated"
+                ),
+                status = HttpStatusCode.OK
+            )
         }
     }
-
 
 
 }

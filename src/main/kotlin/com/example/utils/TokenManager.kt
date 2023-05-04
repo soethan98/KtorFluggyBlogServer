@@ -22,14 +22,13 @@ class TokenManager(config: HoconApplicationConfig){
      */
 
     fun generateJwtToken(subject: String,userEmail:String):String {
-        val token = JWT.create()
+        return JWT.create()
             .withAudience(audience)
             .withIssuer(issuer)
 
-            .withClaim("email", userEmail)
+            .withClaim("userId", subject)
             .withExpiresAt(Date(expirationDate))
             .sign(Algorithm.HMAC256(secret))
-        return token
     }
 
 

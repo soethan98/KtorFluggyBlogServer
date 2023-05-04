@@ -22,7 +22,7 @@ fun Application.configureAuthentication() {
                         .build()
             )
             validate { credential ->
-                    if (credential.payload.getClaim("email").asString().isNotEmpty()) JWTPrincipal(credential.payload) else null
+                    if (credential.payload.getClaim("userId").asString().isNotEmpty()) JWTPrincipal(credential.payload) else null
                 }
         }
     }

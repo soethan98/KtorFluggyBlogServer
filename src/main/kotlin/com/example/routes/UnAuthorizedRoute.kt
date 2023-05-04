@@ -8,10 +8,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.unAuthorizedRoute(){
-    //TODO: Add Jwt token name
     get(Endpoint.Unauthorized.path){
         call.respond(message = ApiResponse(
             success = false,
+            data = null
         ),
             status = HttpStatusCode.Unauthorized)
     }

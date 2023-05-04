@@ -9,6 +9,7 @@ interface UserDataSource {
     suspend fun updateUserInfo(
         userId: String,
         firstName: String,
-        lastName: String
+        lastName: String,
+        updatedAt:Long?
     ): Boolean
 }
